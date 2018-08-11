@@ -8,7 +8,7 @@ The implemented process downloads tools and sources in the directory you cloned 
 ## Sequence of use
 Assumptions:
 - you have cloned this source locally ( I'm assuming in this example under **'./odroid-c2-marshmallow-helper'**) and you are inside it.
-- you have made all **.sh** files executable (**'chmod 755 ./*.sh'**)
+- (if necessary) you have made all **.sh** files executable (**'chmod 755 ./*.sh'**)
 
 Suggested sequence of use for the helper scripts is:
 ```
