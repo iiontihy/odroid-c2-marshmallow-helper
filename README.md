@@ -8,7 +8,7 @@ The implemented process downloads tools and sources in the directory you cloned 
 ## Sequence of use
 Assumptions:
 - you have cloned this source locally ( I'm assuming in this example under **'./odroid-c2-marshmallow-helper'**) and you are inside it.
-- (if necessary) you have made all **.sh** files executable (**'chmod 755 ./*.sh'**)
+- (if necessary) you have made all **.sh** files executable (**'chmod 755 ./*.sh'**).
 
 Suggested sequence of use for the helper scripts is:
 ```
@@ -21,12 +21,12 @@ user@host odroid-c2-marshmallow-helper> ./build-marshmallow.sh
 ### preconfigure.sh
 This script takes care of:
 - downloading and extracting necessary toolchains for u-boot and kernel compilation - placed under **./toolchain** sub-folder.
-- downloading and extracting and configuring standalone OpenJDK 1.7 - placed under **./openjdk7-7u171-x64** sub-folder. The source of this package comes from the Slackware package repository since it was easier to extract, configure and use it in standalone form.
+- downloading, extracting and configuring standalone OpenJDK 1.7 - placed under **./openjdk7-7u171-x64** sub-folder. The source of this package comes from the Slackware package repository since it was easier to extract, configure and use it in standalone form.
 - downloading and extracting the **'repo'** CLI tool - placed under **./repo** sub-folder.
 
 ### init-marshmallow.sh
 This script takes care of:
-- downloading the Odroid-C2 source for Android Marshmallow - placed under **./marshmallow** sub-folder. Currently this action is done using **'anonymous' identity** for Git operations. Please, change this in the script if you need to
+- downloading the Odroid-C2 source for Android Marshmallow - placed under **./marshmallow** sub-folder. Currently this action is done using **'anonymous' identity** for Git operations. Please, change this in the script if you need to.
 - applying all __*.diff__ files it finds in the root repository folder over the **./marshmallow** sub-folder. The __*.diff__ files are assumed to be produced by the **repo diff** command and appied using the **apply_repo_diff.sh** script.
 
 ### build-marshmallow.sh
