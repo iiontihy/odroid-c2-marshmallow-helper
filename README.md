@@ -47,7 +47,7 @@ This script provides automation for applying **.diff** files produced by the **r
 ```
 apply_repo_diff.sh <absolute path to the folder with repo diff files to apply> <absolute path to the project root folder>
 ```
-Each **.diff** file is split into pieces through the lines, containing **'project'** definitions and then these splits are appied to the Android source tree under the **./marshmallow** sub-folder.
+Each **.diff** file is split into pieces through the lines, containing **'project'** definitions and then these splits are applied to the Android source tree under the **./marshmallow** sub-folder.
 
 ### List of patches
 - **001-force-single-threaded-make-build.diff**
