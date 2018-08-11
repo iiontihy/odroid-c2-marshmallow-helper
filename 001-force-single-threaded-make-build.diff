@@ -1,0 +1,18 @@
+
+project build/
+diff --git a/core/main.mk b/core/main.mk
+index a6f829ab6..be92bb1c3 100644
+--- a/core/main.mk
++++ b/core/main.mk
+@@ -22,6 +22,9 @@ endif
+ # If a rule fails, delete $@.
+ .DELETE_ON_ERROR:
+ 
++# Force single-threaded operation
++.NOTPARALLEL:
++
+ # Figure out where we are.
+ #TOP := $(dir $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST)))
+ #TOP := $(patsubst %/,%,$(TOP))
+
+ 

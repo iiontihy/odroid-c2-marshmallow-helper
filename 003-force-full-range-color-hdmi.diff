@@ -1,0 +1,21 @@
+
+project kernel/
+diff --git a/drivers/amlogic/hdmi/hdmi_tx_20/hw/hdmi_tx_hw.c b/drivers/amlogic/hdmi/hdmi_tx_20/hw/hdmi_tx_hw.c
+index 3775674b301e..a945d27e4149 100644
+--- a/drivers/amlogic/hdmi/hdmi_tx_20/hw/hdmi_tx_hw.c
++++ b/drivers/amlogic/hdmi/hdmi_tx_20/hw/hdmi_tx_hw.c
+@@ -4116,7 +4116,13 @@ static void config_hdmi20_tx(enum hdmi_vic vic,
+ 	hdmitx_wr_reg(HDMITX_DWC_FC_AVICONF2, data32);
+ 
+ 	data32  = 0;
+-	data32 |= (((0 == hdmi_color_range_FUL) ? 1 : 0) << 2);
++	// =====================================================================================================
++	// D.Dimitrov - the original commented out condition below will always be false since 'hdmi_color_range_FUL'
++	// is the second element in the enum hdmi_color_range.
++	// Forcefully setting this to '1' to enable unconditional full color range over HDMI (fingers crosed)
++	// data32 |= (((0 == hdmi_color_range_FUL) ? 1 : 0) << 2);
++	// =====================================================================================================
++	data32 |= (1 << 2);
+ 	data32 |= (0 << 0);
+ 	hdmitx_wr_reg(HDMITX_DWC_FC_AVICONF3,   data32);
+ 

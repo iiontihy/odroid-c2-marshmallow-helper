@@ -1,0 +1,60 @@
+
+project build/
+diff --git a/core/Makefile b/core/Makefile
+index becda5ea1..9666365bb 100755
+--- a/core/Makefile
++++ b/core/Makefile
+@@ -897,7 +897,11 @@ ifeq ($(recovery_resources_private),)
+   $(info No private recovery resources for TARGET_DEVICE $(TARGET_DEVICE))
+ endif
+ 
+-recovery_busybox := $(PRODUCT_OUT)/utilities/busybox/bin/busybox
++my_busybox_exclude := nc which
++MY_BUSYBOX_LOCAL_MODULE_PATH := $(PRODUCT_OUT)/utilities/busybox/bin
++recovery_busybox_symlinks := $(addprefix $(MY_BUSYBOX_LOCAL_MODULE_PATH)/,$(filter-out $(my_busybox_exclude),$(notdir $(shell cat $(TOPDIR)external/busybox/busybox-full.links))))
++
++recovery_busybox := $(PRODUCT_OUT)/utilities/busybox/bin/busybox $(recovery_busybox_symlinks)
+ custom_recovery_busybox := $(strip $(wildcard $(TARGET_DEVICE_DIR)/recovery/busybox))
+ ifneq ($(custom_recovery_busybox),)
+   recovery_busybox := $(custom_recovery_busybox)
+@@ -968,6 +974,7 @@ RECOVERYIMAGE_ID_FILE := $(PRODUCT_OUT)/recovery.id
+ # $(1): output file
+ define build-recoveryimage-target
+   @echo ----- Making recovery image ------
++  @echo "recovery_busybox_links: $(recovery_busybox_links)"
+   $(hide) mkdir -p $(TARGET_RECOVERY_OUT)
+   $(hide) mkdir -p $(TARGET_RECOVERY_ROOT_OUT)/etc $(TARGET_RECOVERY_ROOT_OUT)/tmp
+   @echo Copying baseline ramdisk...
+@@ -990,19 +997,19 @@ define build-recoveryimage-target
+   $(hide) cp $(RECOVERY_INSTALL_OTA_KEYS) $(TARGET_RECOVERY_ROOT_OUT)/res/keys
+   $(hide) cat $(INSTALLED_DEFAULT_PROP_TARGET) $(recovery_build_prop) \
+           > $(TARGET_RECOVERY_ROOT_OUT)/default.prop
+-  $(hide) -cp $(recovery_amlogic_initrc) $(TARGET_RECOVERY_ROOT_OUT) || true
+-  $(hide) -cp -f $(recovery_kl) $(TARGET_RECOVERY_ROOT_OUT)/etc/recovery.kl || true
++  cp $(recovery_amlogic_initrc) $(TARGET_RECOVERY_ROOT_OUT) || true
++  cp -f $(recovery_kl) $(TARGET_RECOVERY_ROOT_OUT)/etc/recovery.kl || true
+   $(if $(filter true,$(TARGET_RECOVERY_NO_BUSYBOX)),, \
+-	$(hide) -cp -af $(PRODUCT_OUT)/utilities/busybox/bin $(TARGET_RECOVERY_ROOT_OUT)/bin/ ) || true
+-  $(hide) $(foreach item, $(recovery_mk_e2fs), \
++	cp -dfR $(PRODUCT_OUT)/utilities/busybox/bin/ $(TARGET_RECOVERY_ROOT_OUT)/bin/ ) || true
++  $(foreach item, $(recovery_mk_e2fs), \
+ 	cp -f $(item) $(TARGET_RECOVERY_ROOT_OUT)/bin/)
+-  $(hide) -cp -f $(recovery_remote) $(TARGET_RECOVERY_ROOT_OUT)/sbin/ || true
+-  $(hide) -cp -f $(recovery_remote_conf) $(TARGET_RECOVERY_ROOT_OUT)/etc/ || true
+-  $(hide) -cp -f $(recovery_systemcontrol) $(TARGET_RECOVERY_ROOT_OUT)/sbin/ || true
+-  $(hide) -cp -f $(recovery_mesondisplay_cfg) $(TARGET_RECOVERY_ROOT_OUT)/etc/ || true
+-  $(hide) -cp -f $(recovery_usb_ko) $(TARGET_RECOVERY_ROOT_OUT)/boot/ || true
+-  $(hide) -cp -f $(recovery_usb3_ko) $(TARGET_RECOVERY_ROOT_OUT)/boot/ || true
+-  $(hide) -cp -f $(recovery_sh) $(TARGET_RECOVERY_ROOT_OUT)/sbin/ || true
++  cp -f $(recovery_remote) $(TARGET_RECOVERY_ROOT_OUT)/sbin/ || true
++  cp -f $(recovery_remote_conf) $(TARGET_RECOVERY_ROOT_OUT)/etc/ || true
++  cp -f $(recovery_systemcontrol) $(TARGET_RECOVERY_ROOT_OUT)/sbin/ || true
++  cp -f $(recovery_mesondisplay_cfg) $(TARGET_RECOVERY_ROOT_OUT)/etc/ || true
++  cp -f $(recovery_usb_ko) $(TARGET_RECOVERY_ROOT_OUT)/boot/ || true
++  cp -f $(recovery_usb3_ko) $(TARGET_RECOVERY_ROOT_OUT)/boot/ || true
++  cp -f $(recovery_sh) $(TARGET_RECOVERY_ROOT_OUT)/sbin/ || true
+   $(if $(filter true,$(TARGET_RECOVERY_DISABLE_ADB_SIDELOAD)),, \
+     $(shell sed 's/ro.debuggable=0/ro.debuggable=1/' $(TARGET_RECOVERY_ROOT_OUT)/default.prop \
+                 > $(TARGET_RECOVERY_ROOT_OUT)/tmp.prop; \
+
+ 
